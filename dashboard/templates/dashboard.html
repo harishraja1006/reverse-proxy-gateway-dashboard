@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reverse Proxy Gateway Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet">
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="icon" href="data:,">
+
+    <link rel="stylesheet"
+          href="{{ url_for('dashboard.static', filename='css/style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <header class="header">
+
+        <div>
+
+            <h1>
+                🌐 Reverse Proxy Gateway Dashboard
+            </h1>
+
+            <p>
+                Enterprise Load Balancer Monitoring System
+            </p>
+
+        </div>
+
+        <div class="header-right">
+
+    <div class="status running">
+
+        <i class="bi bi-broadcast-pin"></i>
+
+        LIVE
+
+    </div>
+
+    <div class="refresh">
+
+        <span id="refreshDot"></span>
+
+        AUTO REFRESH
+
+    </div>
+
+    <div id="clock">
+
+        --:--:--
+
+    </div>
+
+</div>
+
+    </header>
+
+    <!-- ========================= -->
+    <!-- TOP INFORMATION -->
+    <!-- ========================= -->
+
+    <section class="top-info">
+
+        <div class="info-card">
+
+            <h3>Current Algorithm</h3>
+
+            <p id="algorithm">
+
+                Round Robin
+
+            </p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Health Monitor</h3>
+
+            <p>
+
+                🟢 ACTIVE
+
+            </p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Cluster Status</h3>
+
+            <p id="clusterStatus">
+
+                3 / 3 ONLINE
+
+            </p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Uptime</h3>
+
+            <p id="uptime">
+
+                00:00:00
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- STATISTICS -->
+    <!-- ========================= -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <h3>Total Requests</h3>
+
+            <h1 id="totalRequests">
+
+                0
+
+            </h1>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>Failed Requests</h3>
+
+            <h1 id="failedRequests">
+
+                0
+
+            </h1>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>Healthy Servers</h3>
+
+            <h1 id="healthyServers">
+
+                0
+
+            </h1>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>Active Connections</h3>
+
+            <h1 id="activeConnections">
+
+                0
+
+            </h1>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>Average Response</h3>
+
+            <h1 id="avgResponse">
+
+                0 ms
+
+            </h1>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3>Scheduler</h3>
+
+            <h1 id="scheduler">
+
+                Round Robin
+
+            </h1>
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- CLUSTER OVERVIEW -->
+    <!-- ========================= -->
+
+    <section class="cluster-section">
+
+        <h2>Cluster Overview</h2>
+
+        <div class="cluster">
+
+            <div class="node client">
+
+                <div class="circle">
+                    👤
+                </div>
+
+                <p>Clients</p>
+
+            </div>
+
+            <div class="arrow">
+
+                ↓
+
+            </div>
+
+            <div class="node loadbalancer">
+
+                <div class="circle">
+
+                    ⚖️
+
+                </div>
+
+                <p>Load Balancer</p>
+
+            </div>
+
+            <div class="server-row">
+
+                <div class="server-node">
+
+                    <div
+                        class="circle healthy"
+                        id="clusterServer1">
+
+                        S1
+
+                    </div>
+
+                    <p>Server 1</p>
+
+                </div>
+
+                <div class="server-node">
+
+                    <div
+                        class="circle healthy"
+                        id="clusterServer2">
+
+                        S2
+
+                    </div>
+
+                    <p>Server 2</p>
+
+                </div>
+
+                <div class="server-node">
+
+                    <div
+                        class="circle healthy"
+                        id="clusterServer3">
+
+                        S3
+
+                    </div>
+
+                    <p>Server 3</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- CHARTS -->
+    <!-- ========================= -->
+
+    <section class="charts-grid">
+
+        <div class="chart-card large">
+
+            <h2>
+
+                Requests Per Second
+
+            </h2>
+
+            <canvas id="requestsChart" height="120"></canvas>
+        </div>
+
+        <div class="chart-card">
+
+            <h2>
+
+                Active Connections
+
+            </h2>
+
+            <canvas id="connectionsChart" height="120"></canvas>
+
+        </div>
+
+        <div class="chart-card">
+
+            <h2>
+
+                Traffic Distribution
+
+            </h2>
+
+            <canvas id="distributionChart" height="120"></canvas>
+
+        </div>
+
+        <div class="chart-card large">
+
+            <h2>
+
+                Response Time
+
+            </h2>
+
+            <canvas id="responseChart" height="120"></canvas>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- SCHEDULER PANEL -->
+    <!-- ========================= -->
+
+    <section class="scheduler-section">
+
+        <div class="scheduler-card">
+
+            <h2>Scheduling Algorithms</h2>
+
+            <div class="algorithm-list">
+
+                <div class="algorithm active" id="algo-round-robin">
+                    <span class="status-dot active"></span>
+                    <span>Round Robin</span>
+                    <span class="badge">ACTIVE</span>
+                </div>
+
+                <div class="algorithm" id="algo-least-connections">
+                    <span class="status-dot"></span>
+                    <span>Least Connections</span>
+                </div>
+
+                <div class="algorithm" id="algo-p2c">
+                    <span class="status-dot"></span>
+                    <span>Power of Two Choices (P2C)</span>
+                </div>
+
+                <div class="algorithm" id="algo-hybrid">
+                    <span class="status-dot"></span>
+                    <span>Hybrid Scheduler</span>
+                </div>
+
+            </div>
+
+            <div class="scheduler-note">
+
+                <p>
+                    The active scheduling strategy is highlighted.
+                    Future versions will allow switching algorithms
+                    directly from the dashboard.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- BACKEND SERVERS -->
+    <!-- ========================= -->
+
+    <section class="servers-section">
+
+        <h2>Backend Servers</h2>
+
+        <div class="server-grid">
+
+            <div class="server-card" id="server-card-1">
+
+                <h3>Server 1</h3>
+
+                <p>Status :
+                    <span id="server1-status">
+                        🟢 UP
+                    </span>
+                </p>
+
+                <p>
+                    Active Connections :
+                    <span id="server1-connections">0</span>
+                </p>
+
+                <p>
+                    Response Time :
+                    <span id="server1-response">0 ms</span>
+                </p>
+
+                <p>
+                    Total Requests :
+                    <span id="server1-requests">0</span>
+                </p>
+
+            </div>
+
+            <div class="server-card" id="server-card-2">
+
+                <h3>Server 2</h3>
+
+                <p>Status :
+                    <span id="server2-status">
+                        🟢 UP
+                    </span>
+                </p>
+
+                <p>
+                    Active Connections :
+                    <span id="server2-connections">0</span>
+                </p>
+
+                <p>
+                    Response Time :
+                    <span id="server2-response">0 ms</span>
+                </p>
+
+                <p>
+                    Total Requests :
+                    <span id="server2-requests">0</span>
+                </p>
+
+            </div>
+
+            <div class="server-card" id="server-card-3">
+
+                <h3>Server 3</h3>
+
+                <p>Status :
+                    <span id="server3-status">
+                        🟢 UP
+                    </span>
+                </p>
+
+                <p>
+                    Active Connections :
+                    <span id="server3-connections">0</span>
+                </p>
+
+                <p>
+                    Response Time :
+                    <span id="server3-response">0 ms</span>
+                </p>
+
+                <p>
+                    Total Requests :
+                    <span id="server3-requests">0</span>
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- LIVE EVENT LOG -->
+    <!-- ========================= -->
+
+    <section class="logs-section">
+
+        <h2>Live Event Log</h2>
+
+        <div id="eventLog" class="event-log">
+
+            <div class="log-entry">
+                Dashboard initialized...
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================= -->
+    <!-- FOOTER -->
+    <!-- ========================= -->
+
+    <footer class="footer">
+
+        <span>
+
+            Reverse Proxy Gateway Dashboard
+
+        </span>
+
+        <span>
+
+            Enterprise Edition
+
+        </span>
+
+        <span>
+
+            Build v1.0.0
+
+        </span>
+
+    </footer>
+
+</div>
+
+<script src="{{ url_for('dashboard.static', filename='js/dashboard.js') }}"></script>
+
+</body>
+
+</html>
