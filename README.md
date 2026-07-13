@@ -1,7 +1,23 @@
 # Reverse Proxy Gateway Dashboard
 
-Enterprise Reverse Proxy Gateway with Real-Time Monitoring Dashboard built using Flask.
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![Flask](https://img.shields.io/badge/Flask-Web_App-black)
+![Chart.js](https://img.shields.io/badge/Chart.js-Visualization-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Completed-success)
+![Dashboard](screenshots/dashboard.png)
+## Table of Contents
 
+- Overview
+- Features
+- Technologies
+- Project Structure
+- Dashboard
+- Scheduling Algorithms
+- Running the Project
+- Future Improvements
+- Author
+Enterprise Reverse Proxy Gateway with Real-Time Monitoring Dashboard built using Flask and Chart.js.
 ---
 
 ## Overview
@@ -12,23 +28,22 @@ The system includes a live monitoring dashboard with real-time telemetry includi
 
 ---
 
+
 ## Features
 
-- Reverse Proxy Gateway
-- Round Robin Load Balancer
-- Multiple Backend Servers
-- Health Monitoring
-- Live Dashboard
-- Real-Time Metrics API
-- Request Per Second Chart
-- Active Connections Monitoring
-- Traffic Distribution Chart
-- Response Time Chart
-- Backend Server Monitoring
-- Live Event Log
-- Cluster Overview
-- Scheduling Algorithm Panel
-
+- ✅ Reverse Proxy Gateway
+- ✅ Round Robin Load Balancer
+- ✅ Multiple Backend Servers
+- ✅ Health Monitoring
+- ✅ Real-Time Monitoring Dashboard
+- ✅ Live Metrics API
+- ✅ Request Per Second Analytics
+- ✅ Active Connections Monitoring
+- ✅ Traffic Distribution Visualization
+- ✅ Response Time Analytics
+- ✅ Backend Server Monitoring
+- ✅ Live Event Logging
+- ✅ Cluster Overview
 ---
 
 ## Technologies
