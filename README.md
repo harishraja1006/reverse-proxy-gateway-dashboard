@@ -27,7 +27,11 @@ This project is a Flask-based Reverse Proxy Load Balancer that distributes incom
 The system includes a live monitoring dashboard with real-time telemetry including request statistics, backend health monitoring, response time visualization and traffic distribution.
 
 ---
+## System Architecture
 
+The architecture below illustrates how client requests are distributed through the Reverse Proxy Gateway to multiple backend servers. The gateway collects metrics and telemetry from all backend servers and powers a real-time monitoring dashboard built with Flask and Chart.js.
+
+![System Architecture](screenshots/architecture_diagram.png)
 
 ## Features
 
