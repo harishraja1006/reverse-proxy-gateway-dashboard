@@ -1,0 +1,34 @@
+services:
+
+  loadbalancer:
+    build: .
+    container_name: reverse-proxy
+    environment:
+      DOCKER_ENV: "true"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - server1
+      - server2
+      - server3
+
+  server1:
+    build: .
+    container_name: backend-server-1
+    command: python backend/server1.py
+    ports:
+      - "5001:5001"
+
+  server2:
+    build: .
+    container_name: backend-server-2
+    command: python backend/server2.py
+    ports:
+      - "5002:5002"
+
+  server3:
+    build: .
+    container_name: backend-server-3
+    command: python backend/server3.py
+    ports:
+      - "5003:5003"

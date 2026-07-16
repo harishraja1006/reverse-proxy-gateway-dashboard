@@ -105,13 +105,13 @@ AVERAGE RESPONSE
 */
 
 const s1 =
-    dashboardData.server_stats["http://localhost:5001"].response_time;
+    dashboardData.server_stats["http://server1:5001"].response_time;
 
 const s2 =
-    dashboardData.server_stats["http://localhost:5002"].response_time;
+    dashboardData.server_stats["http://server2:5002"].response_time;
 
 const s3 =
-    dashboardData.server_stats["http://localhost:5003"].response_time;
+    dashboardData.server_stats["http://server3:5003"].response_time;
 
 const avgResponse =
     ((s1 + s2 + s3) / 3).toFixed(2);
@@ -136,17 +136,17 @@ document.getElementById("scheduler").textContent =
 
     updateServer(
         1,
-        "http://localhost:5001"
+        "http://server1:5001"
     );
 
     updateServer(
         2,
-        "http://localhost:5002"
+        "http://server2:5002"
     );
 
     updateServer(
         3,
-        "http://localhost:5003"
+        "http://server3:5003"
     );
     updateRequestChart();
     updateConnectionsChart();
@@ -229,11 +229,11 @@ function updateDistributionChart() {
 
     distributionChart.data.datasets[0].data = [
 
-        dashboardData.server_stats["http://localhost:5001"].requests,
+        dashboardData.server_stats["http://server1:5001"].requests,
 
-        dashboardData.server_stats["http://localhost:5002"].requests,
+        dashboardData.server_stats["http://server2:5002"].requests,
 
-        dashboardData.server_stats["http://localhost:5003"].requests
+        dashboardData.server_stats["http://server3:5003"].requests
 
     ];
 
@@ -250,13 +250,13 @@ UPDATE RESPONSE CHART
 function updateResponseChart() {
 
     const s1 =
-        dashboardData.server_stats["http://localhost:5001"].response_time;
+        dashboardData.server_stats["http://server1:5001"].response_time;
 
     const s2 =
-        dashboardData.server_stats["http://localhost:5002"].response_time;
+        dashboardData.server_stats["http://server2:5002"].response_time;
 
     const s3 =
-        dashboardData.server_stats["http://localhost:5003"].response_time;
+        dashboardData.server_stats["http://server3:5003"].response_time;
 
     const average =
         (s1 + s2 + s3) / 3;
