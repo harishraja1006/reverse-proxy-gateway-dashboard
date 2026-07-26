@@ -3,14 +3,29 @@ services:
   loadbalancer:
     build: .
     container_name: reverse-proxy
-    environment:
-      DOCKER_ENV: "true"
+
+    env_file:
+      - .env
+
     ports:
       - "8000:8000"
+
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
     depends_on:
-      - server1
-      - server2
-      - server3
+      server1:
+        condition: service_started
+      server2:
+        condition: service_started
+      server3:
+        condition: service_started
 
   server1:
     build: .
@@ -18,6 +33,7 @@ services:
     command: python backend/server1.py
     ports:
       - "5001:5001"
+    restart: unless-stopped
 
   server2:
     build: .
@@ -25,6 +41,7 @@ services:
     command: python backend/server2.py
     ports:
       - "5002:5002"
+    restart: unless-stopped
 
   server3:
     build: .
@@ -32,3 +49,4 @@ services:
     command: python backend/server3.py
     ports:
       - "5003:5003"
+    restart: unless-stopped
