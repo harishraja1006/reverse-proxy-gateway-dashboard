@@ -16,10 +16,13 @@ RUNNING_IN_DOCKER = os.getenv("DOCKER_ENV", "false").lower() == "true"
 
 if RUNNING_IN_DOCKER:
 
-    BACKEND_SERVERS = [
-        "http://server1:5001",
-        "http://server2:5002",
-        "http://server3:5003",
+import os
+
+BACKEND_SERVERS = [
+    os.getenv("SERVER1_URL", "http://localhost:5001"),
+    os.getenv("SERVER2_URL", "http://localhost:5002"),
+    os.getenv("SERVER3_URL", "http://localhost:5003"),
+]
     ]
 
 else:
