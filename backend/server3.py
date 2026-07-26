@@ -1,14 +1,18 @@
 from flask import Flask
+import os
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route("/")
 def home():
     return "Hello from Server 3"
 
-@app.route('/health')
+@app.route("/health")
 def health():
     return {"status": "UP"}
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5003)
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", 5003))
+    )

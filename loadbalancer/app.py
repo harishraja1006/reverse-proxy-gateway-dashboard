@@ -1,8 +1,12 @@
 from flask import Flask
 
 from .proxy import forward_request
-from .health import start_health_monitor
+from .health import start_health_monitor, server_health
+from .metrics import generate_metrics
+from .telemetry import server_stats
 from dashboard.routes import dashboard
+
+import os
 
 app = Flask(__name__)
 
@@ -23,12 +27,11 @@ def home():
 
 
 # ==========================================================
-# Health Status of Backend Servers
+# Health Status
 # ==========================================================
 
 @app.route("/health-status")
 def health_status():
-    from .health import server_health
     return server_health
 
 
@@ -44,11 +47,29 @@ def health():
 
 
 # ==========================================================
+# Prometheus Metrics
+# ==========================================================
+
+@app.route("/metrics")
+def metrics():
+    return (
+        generate_metrics(
+            server_stats,
+            server_health
+        ),
+        200,
+        {
+            "Content-Type": "text/plain"
+        }
+    )
+
+
+# ==========================================================
 # Run Application
 # ==========================================================
 
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
-        port=8000
+        port=int(os.getenv("PORT", 8000))
     )

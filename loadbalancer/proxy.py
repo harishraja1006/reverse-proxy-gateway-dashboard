@@ -1,9 +1,11 @@
 import time
 import requests
+from flask import request
 
 from .scheduler.scheduler import Scheduler
 from .metrics import active_connections, metrics
 from .telemetry import server_stats
+from .logger import logger
 
 # Create one scheduler instance
 scheduler = Scheduler()
@@ -12,7 +14,7 @@ scheduler = Scheduler()
 def forward_request():
     """
     Forward a request to the selected backend server
-    while collecting telemetry.
+    while collecting telemetry and request logs.
     """
 
     server = scheduler.get_server()
@@ -34,11 +36,27 @@ def forward_request():
         server_stats[server]["requests"] += 1
         server_stats[server]["response_time"] = response_time
 
-        return response.text
+        # Log request
+        logger.info(
+            "Client=%s | Backend=%s | Algorithm=%s | Status=%s | ResponseTime=%sms",
+            request.remote_addr,
+            server,
+            type(scheduler.algorithm).__name__,
+            response.status_code,
+            response_time
+        )
+
+        return response.text, response.status_code
 
     except requests.RequestException:
 
         metrics["failed_requests"] += 1
+
+        logger.error(
+            "Client=%s | Backend=%s | Status=503 | Backend Unavailable",
+            request.remote_addr,
+            server
+        )
 
         return "Backend server unavailable", 503
 
