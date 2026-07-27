@@ -26,6 +26,8 @@ def forward_request():
 
     try:
 
+        print(f"Forwarding request to: {server}")
+
         response = requests.get(server)
 
         end_time = time.perf_counter()
