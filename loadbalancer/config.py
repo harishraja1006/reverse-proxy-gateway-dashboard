@@ -16,22 +16,20 @@ RUNNING_IN_DOCKER = os.getenv("DOCKER_ENV", "false").lower() == "true"
 
 if RUNNING_IN_DOCKER:
 
-import os
-
-BACKEND_SERVERS = [
-    os.getenv("SERVER1_URL", "http://localhost:5001"),
-    os.getenv("SERVER2_URL", "http://localhost:5002"),
-    os.getenv("SERVER3_URL", "http://localhost:5003"),
-]
+    BACKEND_SERVERS = [
+        os.getenv("SERVER1_URL", "http://server1:5001"),
+        os.getenv("SERVER2_URL", "http://server2:5002"),
+        os.getenv("SERVER3_URL", "http://server3:5003"),
     ]
 
 else:
 
     BACKEND_SERVERS = [
-        "http://localhost:5001",
-        "http://localhost:5002",
-        "http://localhost:5003",
+        os.getenv("SERVER1_URL", "http://localhost:5001"),
+        os.getenv("SERVER2_URL", "http://localhost:5002"),
+        os.getenv("SERVER3_URL", "http://localhost:5003"),
     ]
+
 
 # ===========================
 # Scheduling Algorithms
@@ -55,5 +53,4 @@ HEALTH_CHECK_INTERVAL = 5
 # ===========================
 
 REQUEST_TIMEOUT = 2
-
 MAX_RETRIES = 3

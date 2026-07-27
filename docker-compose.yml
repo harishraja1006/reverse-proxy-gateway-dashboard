@@ -7,6 +7,9 @@ services:
     env_file:
       - .env
 
+    environment:
+      SERVICE: proxy
+
     ports:
       - "8000:8000"
 
@@ -30,23 +33,35 @@ services:
   server1:
     build: .
     container_name: backend-server-1
-    command: python backend/server1.py
+
+    environment:
+      SERVICE: server1
+
     ports:
       - "5001:5001"
+
     restart: unless-stopped
 
   server2:
     build: .
     container_name: backend-server-2
-    command: python backend/server2.py
+
+    environment:
+      SERVICE: server2
+
     ports:
       - "5002:5002"
+
     restart: unless-stopped
 
   server3:
     build: .
     container_name: backend-server-3
-    command: python backend/server3.py
+
+    environment:
+      SERVICE: server3
+
     ports:
       - "5003:5003"
+
     restart: unless-stopped
