@@ -104,14 +104,16 @@ AVERAGE RESPONSE
 ==========================================================
 */
 
+const servers = Object.keys(dashboardData.server_stats);
+
 const s1 =
-    dashboardData.server_stats["http://server1:5001"].response_time;
+    dashboardData.server_stats[servers[0]].response_time;
 
 const s2 =
-    dashboardData.server_stats["http://server2:5002"].response_time;
+    dashboardData.server_stats[servers[1]].response_time;
 
 const s3 =
-    dashboardData.server_stats["http://server3:5003"].response_time;
+    dashboardData.server_stats[servers[2]].response_time;
 
 const avgResponse =
     ((s1 + s2 + s3) / 3).toFixed(2);
@@ -134,20 +136,12 @@ document.getElementById("scheduler").textContent =
     // Backend Servers
     //-----------------------------
 
-    updateServer(
-        1,
-        "http://server1:5001"
-    );
+const servers = Object.keys(dashboardData.server_stats);
 
-    updateServer(
-        2,
-        "http://server2:5002"
-    );
+updateServer(1, servers[0]);
+updateServer(2, servers[1]);
+updateServer(3, servers[2]);
 
-    updateServer(
-        3,
-        "http://server3:5003"
-    );
     updateRequestChart();
     updateConnectionsChart();
     updateDistributionChart();
@@ -227,13 +221,15 @@ UPDATE DISTRIBUTION CHART
 
 function updateDistributionChart() {
 
+    const servers = Object.keys(dashboardData.server_stats);
+
     distributionChart.data.datasets[0].data = [
 
-        dashboardData.server_stats["http://server1:5001"].requests,
+        dashboardData.server_stats[servers[0]].requests,
 
-        dashboardData.server_stats["http://server2:5002"].requests,
+        dashboardData.server_stats[servers[1]].requests,
 
-        dashboardData.server_stats["http://server3:5003"].requests
+        dashboardData.server_stats[servers[2]].requests
 
     ];
 
@@ -246,32 +242,37 @@ function updateDistributionChart() {
 UPDATE RESPONSE CHART
 ==========================================================
 */
-
 function updateResponseChart() {
 
+    const servers = Object.keys(dashboardData.server_stats);
+
     const s1 =
-        dashboardData.server_stats["http://server1:5001"].response_time;
+        dashboardData.server_stats[servers[0]].response_time;
 
     const s2 =
-        dashboardData.server_stats["http://server2:5002"].response_time;
+        dashboardData.server_stats[servers[1]].response_time;
 
     const s3 =
-        dashboardData.server_stats["http://server3:5003"].response_time;
+        dashboardData.server_stats[servers[2]].response_time;
 
     const average =
         (s1 + s2 + s3) / 3;
 
     responseHistory.push(average);
 
-    if (responseHistory.length > 20) {
-
+    if (responseHistory.length > 20)
         responseHistory.shift();
 
-    }
+    responseChart.data.labels =
+        responseHistory.map((_, i) => i + 1);
+
+    responseChart.data.datasets[0].data =
+        responseHistory;
 
     responseChart.update();
 
 }
+
 /*
 ==========================================================
 UPDATE SERVER CARD
